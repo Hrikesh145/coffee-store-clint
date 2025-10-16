@@ -10,6 +10,9 @@ import Home from "./components/Home.jsx";
 import AddCoffee from "./components/AddCoffee.jsx";
 import UpdateCoffee from "./components/UpdateCoffee.jsx";
 import CoffeeDetails from "./components/CoffeeDetails.jsx";
+import Signin from "./components/signin.jsx";
+import Signup from "./components/signup.jsx";
+import AuthProvider from "./components/contexts/authProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,13 +21,14 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader:()=> fetch('http://localhost:3000/coffees'),
+        loader: () => fetch("http://localhost:3000/coffees"),
         Component: Home,
       },
       {
-        path:"coffee/:id",
-        loader:({params})=> fetch(`http://localhost:3000/coffees/${params.id}`),
-        Component:CoffeeDetails,
+        path: "coffee/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/coffees/${params.id}`),
+        Component: CoffeeDetails,
       },
       {
         path: "addCoffee",
@@ -32,14 +36,25 @@ const router = createBrowserRouter([
       },
       {
         path: "updateCoffee/:id",
-        loader:({params})=> fetch(`http://localhost:3000/coffees/${params.id}`),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/coffees/${params.id}`),
         Component: UpdateCoffee,
+      },
+      {
+        path: "signin",
+        Component: Signin,
+      },
+      {
+        path: "signup",
+        Component: Signup,
       },
     ],
   },
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
