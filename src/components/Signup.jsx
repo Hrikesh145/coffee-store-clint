@@ -10,15 +10,27 @@ const Signup = () => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const { email, password, ...userProfile } = Object.fromEntries(
-      formData.entries()
+    const { email, password, ...restFormData } = Object.fromEntries(
+      formData.entries()   
     );
-    console.log(email, password, userProfile);
+    // const userProfile ={
+    //     email,
+    //     ...rest
+    // }
+    // console.log(email, password, userProfile);
 
     //Create User in firebase
     createUser(email, password)
       .then((result) => {
         console.log(result.user);
+
+        //Data send
+        const userProfile ={
+            email,
+            ...restFormData,
+            creationTime: result.user.metadata.creationTime,
+            lastSIignInTime: result.user.metadata.lastSignInTime
+        }
 
         //Save user to DB
         fetch("http://localhost:3000/users", {
@@ -51,7 +63,7 @@ const Signup = () => {
     <div className="card bg-base-100 mx-auto max-w-sm shrink-0 shadow-2xl mt-30">
       <div className="card-body">
         <form onSubmit={handleSignup} className="fieldset">
-          <h1 className="text-5xl font-bold">Login now!</h1>
+          <h1 className="text-5xl font-bold">Sign Up!</h1>
           <label className="label">Name</label>
           <input type="text" name="name" className="input" placeholder="Name" />
           <label className="label">Address</label>
@@ -92,7 +104,7 @@ const Signup = () => {
           <div>
             <a className="link link-hover">Forgot password?</a>
           </div>
-          <button className="btn btn-neutral mt-4">Login</button>
+          <button className="btn btn-neutral mt-4">Sign up</button>
         </form>
       </div>
     </div>
